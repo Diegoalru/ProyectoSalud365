@@ -57,6 +57,11 @@
                     </button>
                 </li>
                 <li class="mr-2">
+                    <button onclick="showTab('objetivos')" class="tab-button inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300">
+                        🎯 Objetivos
+                    </button>
+                </li>
+                <li class="mr-2">
                     <button onclick="showTab('entrenamiento')" class="tab-button inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300">
                         🏋️‍♂️ Entrenamiento
                     </button>
@@ -71,9 +76,14 @@
                         🧘 Bienestar
                     </button>
                 </li>
-                <li>
+                <li class="mr-2">
                     <button onclick="showTab('foda')" class="tab-button inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300">
-                        📊 FODA por Temas
+                        📊 FODA
+                    </button>
+                </li>
+                 <li>
+                    <button onclick="showTab('conclusiones')" class="tab-button inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300">
+                        🏁 Conclusiones
                     </button>
                 </li>
             </ul>
@@ -112,6 +122,33 @@
                                 <span class="bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded">Manejar el estrés eficazmente</span>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Objetivos -->
+            <div id="objetivos" class="tab-content hidden">
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-700">Objetivos del Plan de Salud 365</h2>
+                     <p class="mb-6 text-gray-600">
+                        El plan se fundamenta en un objetivo general claro y se desglosa en ocho objetivos específicos bajo la metodología SMART (Específicos, Medibles, Alcanzables, Relevantes y con Plazo). Esto asegura un seguimiento preciso y fomenta la motivación a través de metas concretas.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="p-6 bg-gray-50 rounded-lg">
+                            <h3 class="font-semibold text-lg mb-2">🎯 Objetivo General</h3>
+                            <p class="text-gray-600">Mejorar de manera integral la condición física y el bienestar de Pánfilo José durante los próximos 12 meses, a través de la implementación de un plan estructurado de entrenamiento, nutrición y hábitos saludables, con el fin de potenciar su rendimiento deportivo, incrementar su fuerza muscular y manejar eficazmente el estrés.</p>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold mt-8 mb-4 text-gray-700">Objetivos Específicos (SMART)</h3>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="p-4 bg-blue-50 rounded-lg"><strong>1. Entrenamiento:</strong> Cumplir el 90% de las sesiones planificadas en 12 meses.</div>
+                        <div class="p-4 bg-green-50 rounded-lg"><strong>2. Nutrición:</strong> Seguir la guía 5 días/semana por 3 meses para alcanzar metas de proteína y fibra.</div>
+                        <div class="p-4 bg-yellow-50 rounded-lg"><strong>3. Salud Preventiva:</strong> Realizar un chequeo médico y dedicar 1h/semana a actividades sociales por 6 meses.</div>
+                        <div class="p-4 bg-purple-50 rounded-lg"><strong>4. Sueño:</strong> Dormir de 10:30pm a 6:30am, 5 noches/semana por 2 meses, con 60 min sin pantallas.</div>
+                        <div class="p-4 bg-pink-50 rounded-lg"><strong>5. Autocuidado:</strong> Dedicar 2x15 min a escritura y 1x30 min a caminata consciente por semana, durante 3 meses.</div>
+                        <div class="p-4 bg-indigo-50 rounded-lg"><strong>6. Bienestar Digital:</strong> Reducir 45 min/día el tiempo de pantalla y desactivar notificaciones no esenciales en 1 mes.</div>
+                        <div class="p-4 bg-red-50 rounded-lg"><strong>7. Sustancias:</strong> Limitar alcohol a 2 ocasiones/mes y mantener abstinencia de drogas por 12 meses.</div>
+                        <div class="p-4 bg-teal-50 rounded-lg"><strong>8. Sexualidad:</strong> Usar preservativo en todas las relaciones con parejas no estables de forma continua.</div>
                     </div>
                 </div>
             </div>
@@ -188,6 +225,34 @@
                     </div>
                     <div id="foda-display">
                         <!-- Selected FODA content will be displayed here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Conclusiones -->
+            <div id="conclusiones" class="tab-content hidden">
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-700">Conclusiones y Recomendaciones</h2>
+                    <p class="mb-6 text-gray-600">
+                        El "Plan de Salud 365" es un proyecto robusto que demuestra una comprensión profunda de la salud integral. Su diseño, basado en la sinergia, personalización y sostenibilidad, le confiere un alto potencial de eficacia.
+                    </p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h3 class="font-semibold text-lg mb-2">💡 Conclusiones Clave</h3>
+                            <ul class="space-y-2 text-gray-700 list-disc list-inside">
+                                <li><strong>Eficacia por Sinergia:</strong> El plan entrelaza nutrición, entrenamiento y descanso, donde cada componente magnifica los resultados de los otros.</li>
+                                <li><strong>Alta Personalización:</strong> Las estrategias responden directamente a los objetivos, condiciones médicas y estilo de vida de Pánfilo.</li>
+                                <li><strong>Sostenibilidad a Largo Plazo:</strong> La progresión gradual, la flexibilidad y el fomento de la adherencia están diseñados para crear hábitos duraderos.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h3 class="font-semibold text-lg mb-2">🚀 Recomendaciones Finales</h3>
+                            <ul class="space-y-2 text-gray-700 list-disc list-inside">
+                                <li><strong>Gestión del Tiempo:</strong> El mayor desafío será la autodisciplina. Es clave que Pánfilo integre las tareas del plan en su rutina diaria.</li>
+                                <li><strong>El Plan como Mapa Dinámico:</strong> Debe entender el plan no como reglas rígidas, sino como una guía adaptable a las circunstancias de su vida.</li>
+                                <li><strong>Monitoreo y Ajuste:</strong> Realizar chequeos periódicos del progreso, identificar barreras y ajustar estrategias será fundamental para el éxito a largo plazo.</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
