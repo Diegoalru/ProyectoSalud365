@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Interactivo de Salud 365</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: Se ha diseñado una SPA con navegación por pestañas para segmentar lógicamente el contenido del informe en cuatro áreas clave: Perfil, Entrenamiento, Nutrición y Bienestar. Esta estructura permite al usuario enfocarse en un área a la vez, facilitando la asimilación de la información. La interactividad se centra en botones para cambiar de vista y un gráfico dinámico para visualizar el plan de entrenamiento, lo que hace que la exploración de un plan anual complejo sea mucho más intuitiva que leer un documento lineal. -->
+    <!-- Visualization & Content Choices: El plan de entrenamiento anual se presenta en un gráfico de barras de Chart.js (Canvas) para mostrar visualmente la progresión de las fases (Resistencia, Hipertrofia, Fuerza, Potencia). Esta visualización cumple el objetivo de mostrar el cambio a lo largo del tiempo de una manera clara y atractiva. Las guías nutricionales se presentan en tarjetas interactivas que se pueden alternar, permitiendo comparar las diferentes semanas de forma organizada y eficiente. Se confirma que no se utiliza SVG ni Mermaid JS. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfbf7;
+            color: #333;
+        }
+        .tab-button.active {
+            border-bottom-color: #c8a07d;
+            color: #c8a07d;
+            font-weight: 600;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-6xl">
+
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800">Proyecto de Salud 365</h1>
+            <p class="text-lg text-gray-600 mt-2">Un Plan Integral para Pánfilo José</p>
+        </header>
+
+        <nav class="mb-8 border-b border-gray-200">
+            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500">
+                <li class="mr-2">
+                    <button onclick="showTab('perfil')" class="tab-button inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 active">
+                        👤 Perfil del Avatar
+                    </button>
+                </li>
+                <li class="mr-2">
+                    <button onclick="showTab('entrenamiento')" class="tab-button inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300">
+                        🏋️‍♂️ Entrenamiento
+                    </button>
+                </li>
+                <li class="mr-2">
+                    <button onclick="showTab('nutricion')" class="tab-button inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300">
+                        🍎 Nutrición
+                    </button>
+                </li>
+                <li>
+                    <button onclick="showTab('bienestar')" class="tab-button inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300">
+                        🧘 Bienestar y Longevidad
+                    </button>
+                </li>
+            </ul>
+        </nav>
+
+        <main id="main-content">
+
+            <!-- Perfil del Avatar -->
+            <div id="perfil" class="tab-content">
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-700">Conociendo a Pánfilo José</h2>
+                    <p class="mb-6 text-gray-600">
+                        Esta sección detalla el perfil de nuestro avatar, Pánfilo José. Comprender su punto de partida, sus condiciones de salud y, lo más importante, sus motivaciones, es fundamental para el diseño de un plan de salud 100% personalizado y efectivo.
+                    </p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h3 class="font-semibold text-lg mb-2">Información General</h3>
+                            <ul class="space-y-2 text-gray-700">
+                                <li><strong>Edad:</strong> 20 años</li>
+                                <li><strong>Ocupación:</strong> Estudiante y Emprendedor</li>
+                                <li><strong>Nivel Físico:</strong> Intermedio (Gimnasio y Fútbol)</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h3 class="font-semibold text-lg mb-2">Condiciones de Salud</h3>
+                            <ul class="space-y-2 text-gray-700">
+                                <li><strong>Asma:</strong> Controlada, uso ocasional de inhalador.</li>
+                                <li><strong>Anemia:</strong> En tratamiento con suplementos.</li>
+                            </ul>
+                        </div>
+                        <div class="md:col-span-2 bg-gray-50 p-6 rounded-lg">
+                            <h3 class="font-semibold text-lg mb-2">Metas Principales</h3>
+                            <div class="flex flex-wrap gap-4 mt-4">
+                                <span class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded">Mejorar rendimiento en fútbol</span>
+                                <span class="bg-green-100 text-green-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded">Aumentar masa muscular</span>
+                                <span class="bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded">Manejar el estrés eficazmente</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Entrenamiento -->
+            <div id="entrenamiento" class="tab-content hidden">
+                 <div class="bg-white p-8 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-700">Plan de Entrenamiento Anual Periodizado</h2>
+                    <p class="mb-6 text-gray-600">
+                        El núcleo del programa físico es un modelo de periodización por bloques. Este enfoque estructura el año en fases específicas, progresando de un mayor volumen de entrenamiento a una mayor intensidad. Este método es ideal para atletas de nivel intermedio como Pánfilo, ya que maximiza las adaptaciones, previene el estancamiento y reduce el riesgo de lesiones. A continuación se visualiza la distribución de estas fases a lo largo del año.
+                    </p>
+                    <div class="chart-container">
+                        <canvas id="trainingChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nutrición -->
+            <div id="nutricion" class="tab-content hidden">
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-700">Guías de Alimentación Estratégica</h2>
+                     <p class="mb-6 text-gray-600">
+                        La nutrición es el combustible para el rendimiento y la recuperación. El plan se centra en un alto consumo de proteínas para la hipertrofia, fibra para la salud digestiva y grasas saludables. Para asegurar la adherencia a largo plazo y evitar la monotonía, hemos diseñado tres guías semanales flexibles y variadas. Utiliza los botones para explorar cada una de las guías.
+                    </p>
+                    <div class="mb-4 flex justify-center">
+                        <button onclick="showGuide(1)" class="guide-button bg-gray-200 text-gray-800 py-2 px-4 rounded-l-lg">Guía 1</button>
+                        <button onclick="showGuide(2)" class="guide-button bg-gray-200 text-gray-800 py-2 px-4">Guía 2</button>
+                        <button onclick="showGuide(3)" class="guide-button bg-gray-200 text-gray-800 py-2 px-4 rounded-r-lg">Guía 3</button>
+                    </div>
+                    
+                    <div id="guide1" class="guide-content grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                    <div id="guide2" class="guide-content hidden grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                    <div id="guide3" class="guide-content hidden grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                </div>
+            </div>
+
+            <!-- Bienestar y Longevidad -->
+            <div id="bienestar" class="tab-content hidden">
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-700">Estrategias de Bienestar y Longevidad</h2>
+                    <p class="mb-6 text-gray-600">
+                        Un verdadero plan de salud va más allá del ejercicio y la dieta. Esta sección se enfoca en hábitos fundamentales para el bienestar a largo plazo. Desde la optimización del sueño hasta el fortalecimiento de las redes de apoyo, estas estrategias son clave para la recuperación, la gestión del estrés y una vida saludable y longeva.
+                    </p>
+                    <div class="space-y-6">
+                        <div class="p-6 bg-gray-50 rounded-lg">
+                            <h3 class="font-semibold text-lg mb-2">🛌 Optimización del Descanso y Desconexión Digital</h3>
+                            <p class="text-gray-600">Crear un "Santuario del Sueño": horario consistente, oscuridad total, y una regla clave de **60 minutos sin pantallas** antes de dormir para mejorar la calidad del sueño y la recuperación.</p>
+                        </div>
+                         <div class="p-6 bg-gray-50 rounded-lg">
+                            <h3 class="font-semibold text-lg mb-2">🩺 Monitoreo Proactivo de la Salud</h3>
+                            <p class="text-gray-600">Realizar chequeos médicos regulares y análisis de sangre para monitorear indicadores clave y ajustar el plan de manera proactiva, previniendo posibles problemas de salud.</p>
+                        </div>
+                        <div class="p-6 bg-gray-50 rounded-lg">
+                            <h3 class="font-semibold text-lg mb-2">🤝 Fortalecimiento de Redes de Apoyo Social</h3>
+                            <p class="text-gray-600">Fomentar conexiones sociales fuertes y significativas, ya que el apoyo social es un pilar fundamental para la salud mental y la resiliencia ante el estrés.</p>
+                        </div>
+                        <div class="p-6 bg-gray-50 rounded-lg">
+                            <h3 class="font-semibold text-lg mb-2">🧠 Autocuidado y Gestión del Estrés</h3>
+                            <p class="text-gray-600">Incorporar prácticas como la escritura terapéutica o el mindfulness (2 sesiones de 15 min/semana) para procesar pensamientos y reducir la carga mental del día a día.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        const tabs = document.querySelectorAll('.tab-content');
+        const tabButtons = document.querySelectorAll('.tab-button');
+
+        function showTab(tabId) {
+            tabs.forEach(tab => {
+                if (tab.id === tabId) {
+                    tab.classList.remove('hidden');
+                } else {
+                    tab.classList.add('hidden');
+                }
+            });
+            tabButtons.forEach(button => {
+                if (button.getAttribute('onclick').includes(tabId)) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+        }
+
+        const guides = document.querySelectorAll('.guide-content');
+        const guideButtons = document.querySelectorAll('.guide-button');
+
+        function showGuide(guideNum) {
+            guides.forEach((guide, index) => {
+                if ((index + 1) === guideNum) {
+                    guide.classList.remove('hidden');
+                } else {
+                    guide.classList.add('hidden');
+                }
+            });
+            guideButtons.forEach((button, index) => {
+                if ((index + 1) === guideNum) {
+                    button.style.backgroundColor = '#c8a07d';
+                    button.style.color = 'white';
+                } else {
+                    button.style.backgroundColor = '#e5e7eb';
+                    button.style.color = '#1f2937';
+                }
+            });
+        }
+        
+        const nutritionGuides = {
+            guide1: [
+                { meal: "Desayuno", desc: "Avena con proteína en polvo, frutas y nueces." },
+                { meal: "Almuerzo", desc: "Pechuga de pollo a la plancha, quinoa y brócoli al vapor." },
+                { meal: "Cena", desc: "Salmón al horno con batatas asadas y espárragos." },
+                { meal: "Snack 1", desc: "Yogur griego alto en proteína con un puñado de almendras." },
+                { meal: "Snack 2", desc: "Batido de proteína con leche de almendras." },
+                { meal: "Enfoque", desc: "Adaptación y establecimiento de una base nutricional sólida." },
+            ],
+            guide2: [
+                { meal: "Desayuno", desc: "Tostadas integrales con aguacate y huevos revueltos." },
+                { meal: "Almuerzo", desc: "Carne de res magra en salsa de tomate, arroz integral y ensalada verde." },
+                { meal: "Cena", desc: "Filete de tilapia con cuscús y vegetales salteados." },
+                { meal: "Snack 1", desc: "Manzana con mantequilla de maní." },
+                { meal: "Snack 2", desc: "Queso cottage con piña." },
+                { meal: "Enfoque", desc: "Intensificación del aporte de nutrientes y variedad para evitar la monotonía." },
+            ],
+            guide3: [
+                { meal: "Desayuno", desc: "Omelette de claras de huevo con espinacas y queso feta." },
+                { meal: "Almuerzo", desc: "Lentejas guisadas con vegetales y una porción de pavo molido." },
+                { meal: "Cena", desc: "Atún sellado con puré de coliflor y judías verdes." },
+                { meal: "Snack 1", desc: "Edamames al vapor con una pizca de sal." },
+                { meal: "Snack 2", desc: "Un puñado de nueces mixtas y una fruta." },
+                { meal: "Enfoque", desc: "Optimización del rendimiento y la recuperación con comidas densas en nutrientes." },
+            ]
+        };
+
+        function populateGuides() {
+            for (const guideKey in nutritionGuides) {
+                const guideContainer = document.getElementById(guideKey);
+                nutritionGuides[guideKey].forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = "bg-gray-50 p-4 rounded-lg";
+                    const title = document.createElement('h4');
+                    title.className = "font-bold text-gray-800";
+                    title.textContent = item.meal;
+                    const description = document.createElement('p');
+                    description.className = "text-sm text-gray-600";
+                    description.textContent = item.desc;
+                    card.appendChild(title);
+                    card.appendChild(description);
+                    guideContainer.appendChild(card);
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showTab('perfil');
+            populateGuides();
+            showGuide(1);
+
+            const ctx = document.getElementById('trainingChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Ene-Feb', 'Mar-Abr', 'May-Jun', 'Jul-Ago', 'Sep-Oct', 'Nov-Dic'],
+                    datasets: [{
+                        label: 'Fase de Entrenamiento',
+                        data: [1, 2, 2, 3, 4, 4],
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(255, 159, 64, 0.6)',
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(255, 99, 132, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(255, 99, 132, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    switch(value) {
+                                        case 1: return 'Resistencia';
+                                        case 2: return 'Hipertrofia';
+                                        case 3: return 'Fuerza';
+                                        case 4: return 'Potencia';
+                                        default: return '';
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                             callbacks: {
+                                label: function(context) {
+                                    let label = '';
+                                    const value = context.raw;
+                                     switch(value) {
+                                        case 1: label = 'Fase: Resistencia'; break;
+                                        case 2: label = 'Fase: Hipertrofia'; break;
+                                        case 3: label = 'Fase: Fuerza'; break;
+                                        case 4: label = 'Fase: Potencia'; break;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
