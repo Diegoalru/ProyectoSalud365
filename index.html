@@ -10,8 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Warm Neutrals -->
-    <!-- Application Structure Plan: Se ha diseñado una SPA con navegación por pestañas para segmentar lógicamente el contenido del informe en cuatro áreas clave: Perfil, Entrenamiento, Nutrición y Bienestar. Esta estructura permite al usuario enfocarse en un área a la vez, facilitando la asimilación de la información. La interactividad se centra en botones para cambiar de vista y un gráfico dinámico para visualizar el plan de entrenamiento, lo que hace que la exploración de un plan anual complejo sea mucho más intuitiva que leer un documento lineal. -->
-    <!-- Visualization & Content Choices: El plan de entrenamiento anual se presenta en un gráfico de barras de Chart.js (Canvas) para mostrar visualmente la progresión de las fases (Resistencia, Hipertrofia, Fuerza, Potencia). Esta visualización cumple el objetivo de mostrar el cambio a lo largo del tiempo de una manera clara y atractiva. Las guías nutricionales se presentan en tarjetas interactivas que se pueden alternar, permitiendo comparar las diferentes semanas de forma organizada y eficiente. Se confirma que no se utiliza SVG ni Mermaid JS. -->
+    <!-- Application Structure Plan: Se ha diseñado una SPA con navegación por pestañas para segmentar lógicamente el contenido del informe en cinco áreas clave: Perfil, Entrenamiento, Nutrición, Bienestar y FODA. Esta estructura permite al usuario enfocarse en un área a la vez, facilitando la asimilación de la información. La interactividad se centra en botones para cambiar de vista y un gráfico dinámico para visualizar el plan de entrenamiento, lo que hace que la exploración de un plan anual complejo sea mucho más intuitiva que leer un documento lineal. -->
+    <!-- Visualization & Content Choices: El plan de entrenamiento anual se presenta en un gráfico de barras de Chart.js (Canvas) para mostrar visualmente la progresión de las fases. Las guías nutricionales se presentan en tarjetas interactivas. El análisis FODA se ha expandido para cubrir 7 temas clave, presentados en una matriz clara para una fácil comparación. Se confirma que no se utiliza SVG ni Mermaid JS. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -37,7 +37,7 @@
 </head>
 <body class="antialiased">
 
-    <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-6xl">
+    <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-7xl">
 
         <header class="text-center mb-8">
             <h1 class="text-4xl font-bold text-gray-800">Proyecto de Salud 365</h1>
@@ -48,7 +48,7 @@
             <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500">
                 <li class="mr-2">
                     <button onclick="showTab('perfil')" class="tab-button inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 active">
-                        👤 Perfil del Avatar
+                        👤 Perfil
                     </button>
                 </li>
                 <li class="mr-2">
@@ -61,9 +61,14 @@
                         🍎 Nutrición
                     </button>
                 </li>
-                <li>
+                <li class="mr-2">
                     <button onclick="showTab('bienestar')" class="tab-button inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300">
-                        🧘 Bienestar y Longevidad
+                        🧘 Bienestar
+                    </button>
+                </li>
+                <li>
+                    <button onclick="showTab('foda')" class="tab-button inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300">
+                        📊 FODA por Temas
                     </button>
                 </li>
             </ul>
@@ -76,7 +81,7 @@
                 <div class="bg-white p-8 rounded-lg shadow-md">
                     <h2 class="text-2xl font-bold mb-4 text-gray-700">Conociendo a Pánfilo José</h2>
                     <p class="mb-6 text-gray-600">
-                        Esta sección detalla el perfil de nuestro avatar, Pánfilo José. Comprender su punto de partida, sus condiciones de salud y, lo más importante, sus motivaciones, es fundamental para el diseño de un plan de salud 100% personalizado y efectivo.
+                        Esta sección detalla el perfil de nuestro avatar. Comprender su punto de partida, sus condiciones de salud y sus motivaciones es fundamental para el diseño de un plan de salud 100% personalizado.
                     </p>
                     <div class="grid md:grid-cols-2 gap-6">
                         <div class="bg-gray-50 p-6 rounded-lg">
@@ -111,7 +116,7 @@
                  <div class="bg-white p-8 rounded-lg shadow-md">
                     <h2 class="text-2xl font-bold mb-4 text-gray-700">Plan de Entrenamiento Anual Periodizado</h2>
                     <p class="mb-6 text-gray-600">
-                        El núcleo del programa físico es un modelo de periodización por bloques. Este enfoque estructura el año en fases específicas, progresando de un mayor volumen de entrenamiento a una mayor intensidad. Este método es ideal para atletas de nivel intermedio como Pánfilo, ya que maximiza las adaptaciones, previene el estancamiento y reduce el riesgo de lesiones. A continuación se visualiza la distribución de estas fases a lo largo del año.
+                        El núcleo del programa físico es un modelo de periodización por bloques. Este enfoque estructura el año en fases específicas, progresando de un mayor volumen a una mayor intensidad, ideal para maximizar adaptaciones y prevenir el estancamiento.
                     </p>
                     <div class="chart-container">
                         <canvas id="trainingChart"></canvas>
@@ -124,7 +129,7 @@
                 <div class="bg-white p-8 rounded-lg shadow-md">
                     <h2 class="text-2xl font-bold mb-4 text-gray-700">Guías de Alimentación Estratégica</h2>
                      <p class="mb-6 text-gray-600">
-                        La nutrición es el combustible para el rendimiento y la recuperación. El plan se centra en un alto consumo de proteínas para la hipertrofia, fibra para la salud digestiva y grasas saludables. Para asegurar la adherencia a largo plazo y evitar la monotonía, hemos diseñado tres guías semanales flexibles y variadas. Utiliza los botones para explorar cada una de las guías.
+                        La nutrición es el combustible para el rendimiento. Para asegurar la adherencia y evitar la monotonía, hemos diseñado tres guías semanales flexibles y variadas. Utiliza los botones para explorar cada una.
                     </p>
                     <div class="mb-4 flex justify-center">
                         <button onclick="showGuide(1)" class="guide-button bg-gray-200 text-gray-800 py-2 px-4 rounded-l-lg">Guía 1</button>
@@ -132,18 +137,18 @@
                         <button onclick="showGuide(3)" class="guide-button bg-gray-200 text-gray-800 py-2 px-4 rounded-r-lg">Guía 3</button>
                     </div>
                     
-                    <div id="guide1" class="guide-content grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-                    <div id="guide2" class="guide-content hidden grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-                    <div id="guide3" class="guide-content hidden grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                    <div id="guide1" class="guide-content grid md:grid-cols-1 lg:grid-cols-2 gap-4"></div>
+                    <div id="guide2" class="guide-content hidden grid md:grid-cols-1 lg:grid-cols-2 gap-4"></div>
+                    <div id="guide3" class="guide-content hidden grid md:grid-cols-1 lg:grid-cols-2 gap-4"></div>
                 </div>
             </div>
-
+            
             <!-- Bienestar y Longevidad -->
             <div id="bienestar" class="tab-content hidden">
                 <div class="bg-white p-8 rounded-lg shadow-md">
                     <h2 class="text-2xl font-bold mb-4 text-gray-700">Estrategias de Bienestar y Longevidad</h2>
                     <p class="mb-6 text-gray-600">
-                        Un verdadero plan de salud va más allá del ejercicio y la dieta. Esta sección se enfoca en hábitos fundamentales para el bienestar a largo plazo. Desde la optimización del sueño hasta el fortalecimiento de las redes de apoyo, estas estrategias son clave para la recuperación, la gestión del estrés y una vida saludable y longeva.
+                        Un plan de salud integral va más allá del ejercicio y la dieta. Esta sección se enfoca en hábitos fundamentales para el bienestar a largo plazo, desde la optimización del sueño hasta el fortalecimiento de las redes de apoyo.
                     </p>
                     <div class="space-y-6">
                         <div class="p-6 bg-gray-50 rounded-lg">
@@ -166,6 +171,19 @@
                 </div>
             </div>
 
+            <!-- FODA -->
+            <div id="foda" class="tab-content hidden">
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-700">Análisis FODA por Áreas Clave</h2>
+                    <p class="mb-6 text-gray-600">
+                        Este análisis desglosa las fortalezas, oportunidades, debilidades y amenazas para cada uno de los 7 pilares del Plan de Salud 365, permitiendo una visión estratégica y detallada para maximizar el éxito de Pánfilo.
+                    </p>
+                    <div class="space-y-8" id="foda-container">
+                        <!-- FODA content will be injected here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
         </main>
     </div>
 
@@ -182,7 +200,7 @@
                 }
             });
             tabButtons.forEach(button => {
-                if (button.getAttribute('onclick').includes(tabId)) {
+                if (button.getAttribute('onclick').includes(`'${tabId}'`)) {
                     button.classList.add('active');
                 } else {
                     button.classList.remove('active');
@@ -214,37 +232,35 @@
         
         const nutritionGuides = {
             guide1: [
-                { meal: "Desayuno", desc: "Avena con proteína en polvo, frutas y nueces." },
-                { meal: "Almuerzo", desc: "Pechuga de pollo a la plancha, quinoa y brócoli al vapor." },
-                { meal: "Cena", desc: "Salmón al horno con batatas asadas y espárragos." },
-                { meal: "Snack 1", desc: "Yogur griego alto en proteína con un puñado de almendras." },
-                { meal: "Snack 2", desc: "Batido de proteína con leche de almendras." },
-                { meal: "Enfoque", desc: "Adaptación y establecimiento de una base nutricional sólida." },
+                { meal: "Desayuno", desc: "Avena (1 taza), banano (1), espinaca (1/2 taza), fresas (1½ taza) y nueces (28g)." },
+                { meal: "Tentempié", desc: "Batido: Yogurt natural (1 taza), avena (1/2 taza), fresa (1/2 taza), espinaca (1 taza), chía (10g). Tostada integral con mantequilla de maní y aguacate." },
+                { meal: "Almuerzo", desc: "Atún (1 lata) con aceite de oliva, arroz integral (1 taza), ensalada mixta y frijoles negros (1/2 taza)." },
+                { meal: "Cena", desc: "Pollo (100g), brócoli (1 taza), camote mediano, pimientos rojos asados y aguacate (75g)." },
+                { meal: "Enfoque", desc: "Semana de Adaptación y Fundamento Nutricional." },
             ],
             guide2: [
-                { meal: "Desayuno", desc: "Tostadas integrales con aguacate y huevos revueltos." },
-                { meal: "Almuerzo", desc: "Carne de res magra en salsa de tomate, arroz integral y ensalada verde." },
-                { meal: "Cena", desc: "Filete de tilapia con cuscús y vegetales salteados." },
-                { meal: "Snack 1", desc: "Manzana con mantequilla de maní." },
-                { meal: "Snack 2", desc: "Queso cottage con piña." },
-                { meal: "Enfoque", desc: "Intensificación del aporte de nutrientes y variedad para evitar la monotonía." },
+                { meal: "Desayuno", desc: "Avena cocida con arándanos, nueces (28g) y semillas de cáñamo (1 cucharada)." },
+                { meal: "Tentempié", desc: "Naranja y un puñado de almendras (28g). Adicional: 15g de semillas de girasol." },
+                { meal: "Almuerzo", desc: "Burrito de frijoles negros y arroz integral con salsa, aguacate (75g) y semillas de calabaza (15g)." },
+                { meal: "Cena", desc: "Salteado de tofu con vegetales (brócoli, pimiento, cebolla), quinoa y aceite de sésamo (1 cucharada)." },
+                { meal: "Enfoque", desc: "Semana de Intensificación y Variedad de Nutrientes." },
             ],
             guide3: [
-                { meal: "Desayuno", desc: "Omelette de claras de huevo con espinacas y queso feta." },
-                { meal: "Almuerzo", desc: "Lentejas guisadas con vegetales y una porción de pavo molido." },
-                { meal: "Cena", desc: "Atún sellado con puré de coliflor y judías verdes." },
-                { meal: "Snack 1", desc: "Edamames al vapor con una pizca de sal." },
-                { meal: "Snack 2", desc: "Un puñado de nueces mixtas y una fruta." },
-                { meal: "Enfoque", desc: "Optimización del rendimiento y la recuperación con comidas densas en nutrientes." },
+                { meal: "Desayuno", desc: "Panqueques de avena (2), fresa (1/2 taza), miel (1 cda), mantequilla de maní (1 cda) y nueces (15g)." },
+                { meal: "Tentempié", desc: "Manzana verde (1), nueces (20g). Pan pita integral con hummus, lechuga, tomate y aguacate (50g)." },
+                { meal: "Almuerzo", desc: "Tacos de pollo (100g) en tortillas integrales, con ensalada de col, pimientos y aguacate (75g)." },
+                { meal: "Cena", desc: "Pescado (100g), puré de camote, brócoli, zanahoria, remolacha y almendras fileteadas (20g)." },
+                { meal: "Enfoque", desc: "Semana de Optimización del Rendimiento." },
             ]
         };
 
         function populateGuides() {
             for (const guideKey in nutritionGuides) {
                 const guideContainer = document.getElementById(guideKey);
+                guideContainer.innerHTML = '';
                 nutritionGuides[guideKey].forEach(item => {
                     const card = document.createElement('div');
-                    card.className = "bg-gray-50 p-4 rounded-lg";
+                    card.className = `p-4 rounded-lg ${item.meal === 'Enfoque' ? 'bg-amber-50 md:col-span-1 lg:col-span-2' : 'bg-gray-50'}`;
                     const title = document.createElement('h4');
                     title.className = "font-bold text-gray-800";
                     title.textContent = item.meal;
@@ -258,33 +274,118 @@
             }
         }
 
+        const fodaData = [
+            {
+                title: "🏋️‍♂️ Entrenamiento",
+                fortalezas: ["Nivel intermedio y experiencia previa.", "Plan periodizado basado en evidencia científica.", "Motivación intrínseca para mejorar rendimiento."],
+                oportunidades: ["Mejora significativa de fuerza y potencia aplicable al fútbol.", "Prevención de lesiones a largo plazo.", "Establecimiento de una base sólida para futuros ciclos de entrenamiento."],
+                debilidades: ["Falta de experiencia en seguir un plan tan estructurado.", "Posible fatiga inicial en la fase de resistencia.", "Riesgo de sobreentrenamiento si no se respeta el descanso."],
+                amenazas: ["Sobrecarga académica/laboral que impida cumplir las sesiones.", "Lesiones imprevistas durante la práctica deportiva.", "Estancamiento si no se aplica la sobrecarga progresiva correctamente."]
+            },
+            {
+                title: "🍎 Nutrición",
+                fortalezas: ["Metas claras de macronutrientes (proteína, fibra).", "Guías variadas para evitar monotonía.", "Enfoque en alimentos ricos en hierro para su anemia."],
+                oportunidades: ["Optimización de la composición corporal (aumento de músculo, reducción de grasa).", "Mejora de la recuperación post-entrenamiento.", "Creación de hábitos alimenticios sostenibles."],
+                debilidades: ["Falta de hábito en el registro de comidas.", "Posible dificultad para preparar todas las comidas por falta de tiempo.", "Dependencia de suplementos para la anemia."],
+                amenazas: ["Disponibilidad de alimentos saludables en su entorno.", "Eventos sociales que fomenten el consumo de comida no planificada.", "Información nutricional contradictoria en redes sociales."]
+            },
+            {
+                title: "🛌 Sueño",
+                fortalezas: ["Plan diario estructurado con horarios fijos.", "Estrategias claras como la desconexión digital.", "Conciencia de la importancia del sueño para la recuperación."],
+                oportunidades: ["Mejora drástica en la recuperación muscular y cognitiva.", "Regulación del ciclo circadiano para más energía diurna.", "Fortalecimiento del sistema inmunológico."],
+                debilidades: ["Hábito actual de uso de pantallas antes de dormir.", "Dificultad para mantener horarios fijos los fines de semana.", "Estrés que pueda dificultar conciliar el sueño."],
+                amenazas: ["Exigencias académicas o sociales que alteren el horario de sueño.", "Ruido o luz en el ambiente de descanso.", "Uso de estimulantes (cafeína) por la tarde/noche."]
+            },
+            {
+                title: "🧠 Estrés y Autocuidado",
+                fortalezas: ["Uso actual del ejercicio como herramienta anti-estrés.", "Variedad de técnicas propuestas (mindfulness, escritura, etc.).", "Objetivos SMART para incorporar las prácticas."],
+                oportunidades: ["Desarrollo de resiliencia emocional.", "Mejora de la concentración y el enfoque.", "Prevención del agotamiento ('burnout')."],
+                debilidades: ["Falta de experiencia en prácticas como mindfulness o escritura terapéutica.", "Percepción de que el autocuidado 'quita tiempo' a otras responsabilidades.", "Dificultad para desconectar mentalmente del trabajo/estudios."],
+                amenazas: ["Picos de estrés por entregas académicas o demandas del negocio.", "Falta de apoyo social que entienda la necesidad de estos espacios.", "Minimizar la importancia de la salud mental frente a la física."]
+            },
+            {
+                title: "🌐 Bienestar Digital",
+                fortalezas: ["Objetivos claros y medibles (reducir tiempo, desactivar notificaciones).", "Conciencia del impacto negativo de la sobrecarga digital.", "Uso de herramientas del propio smartphone para medir progreso."],
+                oportunidades: ["Aumento del tiempo disponible para otras actividades (hobbies, socializar).", "Mejora de la calidad del sueño y la concentración.", "Fomento de relaciones personales cara a cara."],
+                debilidades: ["Hábito arraigado de multitarea digital.", "Uso de redes sociales como principal fuente de ocio.", "Presión social para estar 'siempre conectado'."],
+                amenazas: ["Naturaleza adictiva de las plataformas y aplicaciones.", "Necesidad de uso de tecnología para estudios y negocio.", "Aumento de notificaciones y demandas digitales externas."]
+            },
+            {
+                title: "💊 Drogas y Sexualidad",
+                fortalezas: ["Plan establece una política clara de consumo responsable y abstinencia.", "Objetivos de salud sexual basados en la prevención (chequeos, uso de preservativo).", "Avatar es consciente de los riesgos."],
+                oportunidades: ["Prevención de enfermedades crónicas y ITS.", "Establecimiento de un estilo de vida saludable a largo plazo.", "Fomento de una comunicación abierta y responsable en relaciones."],
+                debilidades: ["Presión del entorno social en fiestas o reuniones.", "Falta de información detallada sobre ITS más allá del VIH.", "Posible vergüenza o tabú para hablar de salud sexual."],
+                amenazas: ["Normalización del consumo de alcohol en entornos juveniles.", "Falta de acceso o uso inconsistente de métodos de barrera.", "Parejas sexuales que no compartan la misma visión de sexualidad responsable."]
+            },
+            {
+                title: "⏳ Estrategias para la Longevidad",
+                fortalezas: ["Enfoque proactivo y preventivo de la salud.", "Integración de múltiples pilares (descanso, monitoreo médico, redes de apoyo).", "Plan basado en evidencia científica sobre envejecimiento saludable."],
+                oportunidades: ["Reducción del riesgo de enfermedades crónico-degenerativas en el futuro.", "Construcción de un 'capital de salud' para la vida adulta.", "Mejora de la calidad de vida general a largo plazo."],
+                debilidades: ["La percepción de que la longevidad es un problema lejano a los 20 años.", "Dificultad para priorizar chequeos médicos preventivos sin síntomas presentes.", "Puede requerir un esfuerzo consciente mantener las redes de apoyo social."],
+                amenazas: ["Estilo de vida acelerado que deja poco tiempo para la prevención.", "Costos o barreras de acceso al sistema de salud para chequeos.", "Aislamiento social debido a la carga de responsabilidades."]
+            }
+        ];
+
+        function populateFoda() {
+            const container = document.getElementById('foda-container');
+            container.innerHTML = '';
+            fodaData.forEach(item => {
+                const section = document.createElement('div');
+                section.innerHTML = `
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">${item.title}</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-green-800 mb-2">Fortalezas</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">${item.fortalezas.map(f => `<li>${f}</li>`).join('')}</ul>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-blue-800 mb-2">Oportunidades</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">${item.oportunidades.map(o => `<li>${o}</li>`).join('')}</ul>
+                        </div>
+                        <div class="bg-yellow-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-yellow-800 mb-2">Debilidades</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">${item.debilidades.map(d => `<li>${d}</li>`).join('')}</ul>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-red-800 mb-2">Amenazas</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">${item.amenazas.map(a => `<li>${a}</li>`).join('')}</ul>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(section);
+            });
+        }
+
+
         document.addEventListener('DOMContentLoaded', () => {
             showTab('perfil');
             populateGuides();
+            populateFoda();
             showGuide(1);
 
             const ctx = document.getElementById('trainingChart').getContext('2d');
             new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['Ene-Feb', 'Mar-Abr', 'May-Jun', 'Jul-Ago', 'Sep-Oct', 'Nov-Dic'],
+                    labels: ['Ene-Feb', 'Mar-Jun', 'Jul-Sep', 'Oct-Dic'],
                     datasets: [{
                         label: 'Fase de Entrenamiento',
-                        data: [1, 2, 2, 3, 4, 4],
+                        data: [
+                            {x: 'Ene-Feb', y: 1}, 
+                            {x: 'Mar-Jun', y: 2}, 
+                            {x: 'Jul-Sep', y: 3}, 
+                            {x: 'Oct-Dic', y: 4}
+                        ],
                         backgroundColor: [
                             'rgba(54, 162, 235, 0.6)',
                             'rgba(75, 192, 192, 0.6)',
-                            'rgba(75, 192, 192, 0.6)',
                             'rgba(255, 159, 64, 0.6)',
-                            'rgba(255, 99, 132, 0.6)',
                             'rgba(255, 99, 132, 0.6)'
                         ],
                         borderColor: [
                             'rgba(54, 162, 235, 1)',
                             'rgba(75, 192, 192, 1)',
-                            'rgba(75, 192, 192, 1)',
                             'rgba(255, 159, 64, 1)',
-                            'rgba(255, 99, 132, 1)',
                             'rgba(255, 99, 132, 1)'
                         ],
                         borderWidth: 1
@@ -296,15 +397,12 @@
                     scales: {
                         y: {
                             beginAtZero: true,
+                            max: 4.5,
                             ticks: {
-                                callback: function(value, index, values) {
-                                    switch(value) {
-                                        case 1: return 'Resistencia';
-                                        case 2: return 'Hipertrofia';
-                                        case 3: return 'Fuerza';
-                                        case 4: return 'Potencia';
-                                        default: return '';
-                                    }
+                                stepSize: 1,
+                                callback: function(value) {
+                                    const labels = {1: 'Resistencia', 2: 'Hipertrofia', 3: 'Fuerza', 4: 'Potencia'};
+                                    return labels[value] || '';
                                 }
                             }
                         }
@@ -317,13 +415,9 @@
                              callbacks: {
                                 label: function(context) {
                                     let label = '';
-                                    const value = context.raw;
-                                     switch(value) {
-                                        case 1: label = 'Fase: Resistencia'; break;
-                                        case 2: label = 'Fase: Hipertrofia'; break;
-                                        case 3: label = 'Fase: Fuerza'; break;
-                                        case 4: label = 'Fase: Potencia'; break;
-                                    }
+                                    const value = context.raw.y;
+                                    const labels = {1: 'Resistencia', 2: 'Hipertrofia', 3: 'Fuerza', 4: 'Potencia'};
+                                    label = 'Fase: ' + (labels[value] || '');
                                     return label;
                                 }
                             }
