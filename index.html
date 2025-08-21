@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Warm Neutrals -->
     <!-- Application Structure Plan: Se ha diseñado una SPA con navegación por pestañas para segmentar lógicamente el contenido del informe en cinco áreas clave: Perfil, Entrenamiento, Nutrición, Bienestar y FODA. Esta estructura permite al usuario enfocarse en un área a la vez, facilitando la asimilación de la información. La interactividad se centra en botones para cambiar de vista y un gráfico dinámico para visualizar el plan de entrenamiento, lo que hace que la exploración de un plan anual complejo sea mucho más intuitiva que leer un documento lineal. -->
-    <!-- Visualization & Content Choices: El plan de entrenamiento anual se presenta en un gráfico de barras de Chart.js (Canvas) para mostrar visualmente la progresión de las fases. Las guías nutricionales se presentan en tarjetas interactivas. El análisis FODA se ha expandido para cubrir 7 temas clave, presentados en una matriz clara para una fácil comparación. Se confirma que no se utiliza SVG ni Mermaid JS. -->
+    <!-- Visualization & Content Choices: El plan de entrenamiento anual se presenta en un gráfico de barras de Chart.js (Canvas) para mostrar visualmente la progresión de las fases. Las guías nutricionales se presentan en tarjetas interactivas. El análisis FODA se ha expandido para cubrir 7 temas clave, presentados en una matriz clara y seleccionable para una fácil comparación. Se confirma que no se utiliza SVG ni Mermaid JS. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -32,6 +32,11 @@
             margin-right: auto;
             height: 400px;
             max-height: 50vh;
+        }
+        .foda-button.active {
+            background-color: #c8a07d;
+            color: white;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -176,10 +181,13 @@
                 <div class="bg-white p-8 rounded-lg shadow-md">
                     <h2 class="text-2xl font-bold mb-4 text-gray-700">Análisis FODA por Áreas Clave</h2>
                     <p class="mb-6 text-gray-600">
-                        Este análisis desglosa las fortalezas, oportunidades, debilidades y amenazas para cada uno de los 7 pilares del Plan de Salud 365, permitiendo una visión estratégica y detallada para maximizar el éxito de Pánfilo.
+                        Este análisis desglosa las fortalezas, oportunidades, debilidades y amenazas para cada pilar del Plan de Salud 365. Selecciona un tema para explorar su análisis estratégico.
                     </p>
-                    <div class="space-y-8" id="foda-container">
-                        <!-- FODA content will be injected here by JavaScript -->
+                    <div id="foda-buttons" class="flex flex-wrap justify-center gap-2 mb-6">
+                        <!-- FODA buttons will be injected here -->
+                    </div>
+                    <div id="foda-display">
+                        <!-- Selected FODA content will be displayed here -->
                     </div>
                 </div>
             </div>
@@ -318,7 +326,7 @@
                 amenazas: ["Normalización del consumo de alcohol en entornos juveniles.", "Falta de acceso o uso inconsistente de métodos de barrera.", "Parejas sexuales que no compartan la misma visión de sexualidad responsable."]
             },
             {
-                title: "⏳ Estrategias para la Longevidad",
+                title: "⏳ Longevidad",
                 fortalezas: ["Enfoque proactivo y preventivo de la salud.", "Integración de múltiples pilares (descanso, monitoreo médico, redes de apoyo).", "Plan basado en evidencia científica sobre envejecimiento saludable."],
                 oportunidades: ["Reducción del riesgo de enfermedades crónico-degenerativas en el futuro.", "Construcción de un 'capital de salud' para la vida adulta.", "Mejora de la calidad de vida general a largo plazo."],
                 debilidades: ["La percepción de que la longevidad es un problema lejano a los 20 años.", "Dificultad para priorizar chequeos médicos preventivos sin síntomas presentes.", "Puede requerir un esfuerzo consciente mantener las redes de apoyo social."],
@@ -326,33 +334,51 @@
             }
         ];
 
-        function populateFoda() {
-            const container = document.getElementById('foda-container');
-            container.innerHTML = '';
-            fodaData.forEach(item => {
-                const section = document.createElement('div');
-                section.innerHTML = `
-                    <h3 class="text-xl font-bold mb-4 text-gray-800">${item.title}</h3>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="bg-green-50 p-4 rounded-lg">
-                            <h4 class="font-semibold text-green-800 mb-2">Fortalezas</h4>
-                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">${item.fortalezas.map(f => `<li>${f}</li>`).join('')}</ul>
-                        </div>
-                        <div class="bg-blue-50 p-4 rounded-lg">
-                            <h4 class="font-semibold text-blue-800 mb-2">Oportunidades</h4>
-                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">${item.oportunidades.map(o => `<li>${o}</li>`).join('')}</ul>
-                        </div>
-                        <div class="bg-yellow-50 p-4 rounded-lg">
-                            <h4 class="font-semibold text-yellow-800 mb-2">Debilidades</h4>
-                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">${item.debilidades.map(d => `<li>${d}</li>`).join('')}</ul>
-                        </div>
-                        <div class="bg-red-50 p-4 rounded-lg">
-                            <h4 class="font-semibold text-red-800 mb-2">Amenazas</h4>
-                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">${item.amenazas.map(a => `<li>${a}</li>`).join('')}</ul>
-                        </div>
+        function showFoda(selectedIndex) {
+            const display = document.getElementById('foda-display');
+            const item = fodaData[selectedIndex];
+            display.innerHTML = `
+                <h3 class="text-xl font-bold mb-4 text-gray-800">${item.title}</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-green-800 mb-2">Fortalezas</h4>
+                        <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">${item.fortalezas.map(f => `<li>${f}</li>`).join('')}</ul>
                     </div>
-                `;
-                container.appendChild(section);
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-blue-800 mb-2">Oportunidades</h4>
+                        <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">${item.oportunidades.map(o => `<li>${o}</li>`).join('')}</ul>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-yellow-800 mb-2">Debilidades</h4>
+                        <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">${item.debilidades.map(d => `<li>${d}</li>`).join('')}</ul>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-red-800 mb-2">Amenazas</h4>
+                        <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">${item.amenazas.map(a => `<li>${a}</li>`).join('')}</ul>
+                    </div>
+                </div>
+            `;
+
+            const fodaButtons = document.querySelectorAll('.foda-button');
+            fodaButtons.forEach((button, index) => {
+                if (index === selectedIndex) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+        }
+
+        function setupFoda() {
+            const buttonContainer = document.getElementById('foda-buttons');
+            buttonContainer.innerHTML = '';
+            fodaData.forEach((item, index) => {
+                const button = document.createElement('button');
+                const titleText = item.title.substring(item.title.indexOf(' ') + 1);
+                button.className = 'foda-button bg-gray-200 text-gray-700 py-2 px-3 rounded-lg text-sm hover:bg-gray-300 transition-colors';
+                button.innerHTML = `${item.title.substring(0, item.title.indexOf(' '))} <span class="hidden sm:inline">${titleText}</span>`;
+                button.onclick = () => showFoda(index);
+                buttonContainer.appendChild(button);
             });
         }
 
@@ -360,7 +386,8 @@
         document.addEventListener('DOMContentLoaded', () => {
             showTab('perfil');
             populateGuides();
-            populateFoda();
+            setupFoda();
+            showFoda(0);
             showGuide(1);
 
             const ctx = document.getElementById('trainingChart').getContext('2d');
